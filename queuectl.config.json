@@ -1,0 +1,7 @@
+{
+  "max-retries" : 3,
+  "workers": 4,
+  "db-type" : "file/memory",
+  "db-file" : "locationOffile.db",
+
+}

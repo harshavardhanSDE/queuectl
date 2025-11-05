@@ -1,0 +1,22 @@
+{
+  "name": "queuectl",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "bin": {
+    "queuectl": "./src/cli.js"
+  },
+  "scripts": {
+    "cli:dev": "node --experimental-sqlite ./src/cli.js",
+    "db:dev" : "node --experimental-sqlite src/lib/"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.12.4",
+  "dependencies": {
+    "chalk": "^5.6.2",
+    "yargs": "^18.0.0"
+  }
+}
