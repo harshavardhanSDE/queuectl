@@ -30,6 +30,8 @@ export const handler = (arg) =>{
                     priority: `${arg.priority ? arg.priority : 0}`,
                 }
             );
+
+            console.log(chalk.bgGreen(`Task ${arg.id} enqueued!`));
         }
 
 
