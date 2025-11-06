@@ -10,4 +10,9 @@ class Orchestrator {
     register() {
 
     }
+    setWorkers(workers) {
+
+    }
+
+
 }

@@ -1,31 +1,16 @@
 import { DatabaseSync } from 'node:sqlite';
+/*
+* Defaults to persistent storage @tasks.db
+* @params
+*/
+export const db = new DatabaseSync(":memory:");
 
-const db = new DatabaseSync(":memory:");
-
-db.exec(`
-  CREATE TABLE IF NOT EXISTS books (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title TEXT NOT NULL,
-    author TEXT NOT NULL,
-    published_year INTEGER,
-    genre TEXT,
-    in_stock INTEGER DEFAULT 1
-  )
-`);
-
-const insertStmt = db.prepare(`
-  INSERT INTO books (title, author, published_year, genre)
-  VALUES (?, ?, ?, ?)
-`);
-
-// Execute the prepared statement with run()
-insertStmt.run('Dune', 'Frank Herbert', 1965, 'Science Fiction');
-
-insertStmt.run('Jungle book', 'Kipling', 1965, 'Cat');
-
-
-// Query data with a prepared statement
-const queryStmt = db.prepare('SELECT * FROM books WHERE genre = ?');
-const scifiBooks = queryStmt.all('Cat');
-
-console.log(scifiBooks);
+export const initDB = (typeOfDB = String()) => {
+    if (typeOfDB == null) {
+        return new DatabaseSync(":memory:");
+    } else if (typeOfDB === "persistent") {
+        return new DatabaseSync();
+    } else {
+        return new DatabaseSync(":memory:");
+    }
+}
