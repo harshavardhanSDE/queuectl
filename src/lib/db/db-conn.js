@@ -1,9 +1,16 @@
 import { DatabaseSync } from 'node:sqlite';
+import path from 'path';
+
 /*
 * Defaults to persistent storage @tasks.db
 * @params
 */
-export const db = new DatabaseSync(":memory:");
+
+
+
+// for persistent storage of tasks.
+export const db = new DatabaseSync(path.resolve("tasks.db"));
+
 
 export const initDB = (typeOfDB = String()) => {
     if (typeOfDB == null) {

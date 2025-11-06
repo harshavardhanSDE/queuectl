@@ -1,43 +1,51 @@
 import { db } from './db-conn.js';
 import chalk from 'chalk';
+
+
 // add-tasks
 const insertStmt = db.prepare(`
   INSERT INTO tasks_queue (uuid, command, state, attempts, max_tries, created_at, updated_at, priority)
-  VALUES (?, ?, ?, ?, ?, ?, ?)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?)
 `);
 
 export function insertNewTaskIntoDb(task = {
-    uuid, cmd, state, max_tries, priority
+    uuid, cmd, state, attempts, max_tries, priority
 }) {
 
     try {
         // commands in tasks_queue
-        let commands = db.get(`
-            SELECT cmd FROM tasks_queue;
-        `);
-
+        let commands = db.prepare(`SELECT command FROM tasks_queue;`).all().map(res => res.cmd);
 
         // uuids in tasks_queue,
-        let uuids = db.get(
-            `SELECT uuid FROM tasks_queue;`
-        )
+        let uuids = db.prepare(`SELECT uuid FROM tasks_queue;`).all().map(res => res.uuid);
+
 
         // criteria for checking duplicate commands, & uuid.
-        if (commands.includes(task.cmd) && uuids.includes(task.uuid)) {
-            console.error(chalk.redBright(`${task.cmd} already exists`));
+        if (commands.includes(task.cmd) || uuids.includes(task.uuid)) {
+            console.error(chalk.bgRed(`Tasks with ${ commands.includes(task.cmd) ? task.cmd : task.uuid } already exists`));
         } else {
             insertStmt.run(
                 task.uuid,
                 task.cmd,
                 task.state,
+                task.attempts,
                 task.max_tries,
-                Date.now(),
-                Date.now(),
+                new Date(Date.now()).toLocaleString(),
+                new Date(Date.now()).toLocaleString(),
                 task.priority
             );
         }
     } catch(err) {
-        throw new Error(chalk.bgRed(err));
+        throw new Error(chalk.bgRedBright(err));
     }
 }
 
+
+// insertNewTaskIntoDb({
+//     uuid: "job-id-5",
+//     cmd: "echo 'harsha'",
+//     attempts: 4,
+//     state: "tried",
+//     max_tries: 3,
+//     priority: 0,
+// })
