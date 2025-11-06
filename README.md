@@ -9,7 +9,10 @@ cli application for managing background jobs using workers.
    2. [Worker](#worker-slave)
 4. [Custom config](#custom-config)
 5. [Logging](#logging)
-6. [Task Queue schema](#task-queue-schema)
+6. [Data storage](#data-storage-persistence-temporary)
+7. [Task Queue schema](#task-queue-schema)
+8. [Caveats](#caveats)
+9. [End note](#end-note)
 
 ## Requirements
 - [ ] Working CLI application.
@@ -63,14 +66,24 @@ Orchestrator is the managing entity responsible for
 ## Logging
 `pino` is used to logging,
 
+## Data storage (Persistence/ Temporary)
+The tool is built in such a way to be useful in both preferred way for storing tasks, with default option for storing tasts in a `db` file called `tasks.db`, or any other name specified by the user.
+
+
 ## Task Queue Schema
-| Field      	| Types    	| Default    	|
-|------------	|----------	|------------	|
-| uuid       	| INTEGER  	| no         	|
-| cmd        	| TEXT     	| pwd        	|
-| state      	| TEXT     	| "pending"  	|
-| attempts   	| INTEGER  	| 0          	|
-| max_tries  	| INTEGER  	| 3          	|
-| create_at  	| DATETIME 	| DATE.now() 	|
-| updated_at 	| DATETIME 	| DATE.now() 	|
-| priority   	| INTEGER  	| 0          	|
+| Field      	          | Types    	| Default    	|
+|-----------------------|----------	|------------	|
+| uuid (REQUIRED)     	 | INTEGER  	| no         	|
+| cmd(REQUIRED)      	  | TEXT     	| pwd        	|
+| state      	          | TEXT     	| "pending"  	|
+| attempts   	          | INTEGER  	| 0          	|
+| max_tries  	          | INTEGER  	| 3          	|
+| create_at  	          | DATETIME 	| DATE.now() 	|
+| updated_at 	          | DATETIME 	| DATE.now() 	|
+| priority   	          | INTEGER  	| 0          	|
+
+## Caveats
+1. The mechanism for checking the uniqueness of tasks is rudimentary, and will likely to be updated later for further stability.
+
+## End note
+A sincere thanks to the _flam_ team for setting up the assignment, I thoroughly enjoyed building it from scratch. And learned quite a lot.
