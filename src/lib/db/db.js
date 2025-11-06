@@ -2,8 +2,8 @@ import { db } from './db-conn.js';
 import chalk from 'chalk';
 // add-tasks
 const insertStmt = db.prepare(`
-  INSERT INTO tasks_queue (uuid, command, state, attempts, max_tries, created_at, updated_at)
-  VALUES (?, ?, ?, ?, ?, ?)
+  INSERT INTO tasks_queue (uuid, command, state, attempts, max_tries, created_at, updated_at, priority)
+  VALUES (?, ?, ?, ?, ?, ?, ?)
 `);
 
 export function insertNewTaskIntoDb(task = {
