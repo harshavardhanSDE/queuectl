@@ -41,12 +41,3 @@ export function insertNewTaskIntoDb(task = {
     }
 }
 
-
-// insertNewTaskIntoDb({
-//     uuid: "job-id-5",
-//     cmd: "echo 'harsha'",
-//     attempts: 4,
-//     state: "tried",
-//     max_tries: 3,
-//     priority: 0,
-// })
