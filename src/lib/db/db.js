@@ -34,6 +34,7 @@ export function insertNewTaskIntoDb(task = {
                 new Date(Date.now()).toLocaleString(),
                 task.priority
             );
+            console.log(chalk.bgGreen(`Task ${arg.id} enqueued!`));
         }
     } catch(err) {
         throw new Error(chalk.bgRedBright(err));
