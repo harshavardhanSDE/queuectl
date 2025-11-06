@@ -87,3 +87,7 @@ The tool is built in such a way to be useful in both preferred way for storing t
 
 ## End note
 A sincere thanks to the _flam_ team for setting up the assignment, I thoroughly enjoyed building it from scratch. And learned quite a lot.
+
+
+
+node --experimental-sqlite src/cli.js enqueue '{"id": "id4", "command": "echo `cat somhing`", "max_tries" : "4"}'
