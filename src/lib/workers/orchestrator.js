@@ -2,6 +2,8 @@ import { db} from "../db/db-conn.js";
 import { Worker } from 'node:worker_threads';
 import path from 'node:path';
 
+import { deleteAllRows} from "../db/db.js";
+
 // for tracking all pending tasks,
 let TASKS_QUEUE = new Set();
 
@@ -29,21 +31,21 @@ let MAX_WORKERS = 3;
 //     console.log(task);
 // }
 
-const worker1 = new Worker(path.resolve('src/lib/workers/worker.js'), {
-    workerData: {
-        command: "echo 'from worker 1'"
-    }
-});
-
-worker1.on('message', function (message) {
-    console.log(message.stdout);
-})
-worker2.on('message', function (message) {
-    console.log(message.stdout);
-})
-worker3.on('message', function (message) {
-    console.log(message.stdout);
-})
+// const worker1 = new Worker(path.resolve('src/lib/workers/worker.js'), {
+//     workerData: {
+//         command: "echo 'from worker 1'"
+//     }
+// });
+//
+// worker1.on('message', function (message) {
+//     console.log(message.stdout);
+// })
+// worker2.on('message', function (message) {
+//     console.log(message.stdout);
+// })
+// worker3.on('message', function (message) {
+//     console.log(message.stdout);
+// })
 //
 // worker.on('error', function (error) {
 //     console.error(error);
@@ -52,5 +54,8 @@ worker3.on('message', function (message) {
 // worker.on('exit', function (code) {
 //     console.log(code);
 // })
+
+deleteAllRows();
+
 
 
