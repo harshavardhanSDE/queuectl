@@ -41,3 +41,14 @@ export function insertNewTaskIntoDb(task = {
     }
 }
 
+// deleting all the rows
+
+export function deleteAllRows(){
+    try {
+        db.prepare(`DELETE FROM tasks_queue`).all();
+        console.log(chalk.bgGreen("Deleted all tasks."))
+    } catch(err) {
+        console.error(chalk.bgRed(`Failed to delete all tasks: error - ${err.message}`));
+    }
+}
+
