@@ -30,8 +30,8 @@ export function insertNewTaskIntoDb(task = {
                 task.state,
                 task.attempts,
                 task.max_tries,
-                new Date(Date.now()).toLocaleString(),
-                new Date(Date.now()).toLocaleString(),
+                Date.now(),
+                Date.now(),
                 task.priority
             );
             console.log(chalk.bgGreen(`Task ${task.uuid} enqueued!`));
@@ -43,16 +43,41 @@ export function insertNewTaskIntoDb(task = {
 
 // deleting all the rows
 
-export function deleteRows(...condition){
+export function deleteRows(){
     try {
-        if ( !condition ) {
             db.prepare(`DELETE FROM tasks_queue`).all();
             console.log(chalk.bgGreen("Deleted all tasks."))
-        } else {
-
-        }
     } catch(err) {
         console.error(chalk.bgRed(`Failed to delete all tasks: error - ${err.message}`));
+    }
+}
+
+
+// function for getting all the task with certain, state.
+export function getRows(value, ...cols) {
+    try {
+        return db.prepare(`SELECT ${ cols.includes("all") ? "*" : cols.join(", ")} FROM tasks_queue WHERE state = ?;`)
+            .all(value)
+            .map(res => res);
+    } catch( error ) {
+        console.error(chalk.bgRed(`Failed to get rows with: ${[...cols]}`));
+    }
+}
+
+export function getAllRows(){
+    try {
+        return db.prepare(`SELECT * FROM tasks_queue`).all().map(res => res);
+    } catch( error ) {
+        console.error(chalk.bgRed(`Failed to get rows`));
+    }
+}
+
+
+export function update(col, value, id) {
+    try {
+        db.prepare(`UPDATE tasks_queue SET ${col.toLowerCase()} = ? WHERE uuid = ?`).all(value, id);
+    } catch( error ) {
+        console.error(chalk.bgRedBright(error));
     }
 }
 

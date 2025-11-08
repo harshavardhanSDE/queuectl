@@ -11,7 +11,8 @@
     "cli:dev": "node --experimental-sqlite src/cli.js",
     "db:dev": "node --experimental-sqlite src/lib/",
     "ui": "live-server --port=8081 --host=0.0.0.0 --no-browser --entry-file='/src/ui/index.html' --watch='./src/ui/index.html'",
-    "start": "pnpm run cli:dev && pnpm run ui"
+    "start": "pnpm run cli:dev && pnpm run ui",
+    "test" : "jest"
   },
   "keywords": [],
   "author": "",
@@ -23,5 +24,8 @@
     "live-server": "^1.2.2",
     "pino": "^10.1.0",
     "yargs": "^18.0.0"
+  },
+  "devDependencies": {
+    "jest": "^30.2.0"
   }
 }

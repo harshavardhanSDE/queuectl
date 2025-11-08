@@ -12,7 +12,18 @@ db.exec(`
     created_at DATETIME NOT NULL,
     updated_at DATETIME NOT NULL,
     priority INTEGER
-  )
+  ); 
+
+    CREATE TRIGGER IF NOT EXISTS update_time_stamps
+      AFTER UPDATE OF state ON tasks_queue
+      FOR EACH ROW
+      WHEN NEW.state != OLD.state
+      BEGIN 
+          UPDATE tasks_queue
+          SET updated_at = strftime('%s', 'now')
+          WHERE uuid = OLD.uuid;
+      END;
+      
 `);
 
 

@@ -1,48 +1,27 @@
-import { exec } from 'node:child_process';
-import { parentPort, workerData } from 'node:worker_threads';
-import { promisify } from 'node:util';
+import { exec } from "node:child_process";
+import { parentPort } from "node:worker_threads";
+import { promisify } from "node:util";
 
+const execAsync = promisify(exec);
 
-// converts the function to promise.
-const executeAsyncCommands = promisify(exec);
-
-async function execute( command ){
+async function execute(command) {
     try {
-        const { stdout, stderr } = await executeAsyncCommands(command);
-        if ( stderr ) {
-            return {
-                status: false,
-                error: stderr,
-            } // status, err
-        } // stderr
-
-        return {
-            status: true,
-            stdout: stdout,
-        } // stdout
-
-    } catch ( err ) {
-        return {
-            status: false,
-            error: err,
-        }; // returning error status,
+        const { stdout, stderr } = await execAsync(command);
+        if (stderr) return { status: false, error: stderr };
+        return { status: true, stdout };
+    } catch (err) {
+        return { status: false, error: err.message };
     }
 }
 
-
-const run = async () => {
-    const command = workerData?.command;
-    if (!command) {
-        parentPort.postMessage({
-            status: false,
-            error: new Error("Command not found"),
-        })
+parentPort.on("message", async (data) => {
+    if (!data?.command) {
+        parentPort.postMessage({ status: false, error: "Command not found" });
+        process.exit(1);
+        return;
     }
-    const onExecuted = await execute(command);
-    parentPort.postMessage(onExecuted);
-}
 
-run();
-
-
-
+    const result = await execute(data.command);
+    parentPort.postMessage(result);
+    process.exit(result.status ? 0 : 1); // terminate cleanly
+});
